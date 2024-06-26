@@ -2,7 +2,7 @@
 
 1. We use the SAP HANA Application Migration Assistant for migrating XS Classic application to XS Advanced Programming Model or Cloud Application Programming Model.  
 
-2. The SAP HANA Application Migration Assistant converts the source XSC application  to a CAP application with SAP HANA Cloud as a database where the Source XSC Repository  artefacts are converted to the corresponding target CAP artefacts.
+2. The SAP HANA Application Migration Assistant converts the source XSC application  to a CAP application with SAP HANA Cloud as a database where the Source XSC Repository  artifacts are converted to the corresponding target CAP artifacts.
 
 # Using SAP HANA Application Migration Assistant to migrate XSC application to CAP Application
 
@@ -217,7 +217,7 @@
 
 6. SQL syntax changes in procedure is not integrated ex: UPDATE FROM has to be changed to MERGE INTO, TRUNCATE statement has to be changed to DELETE FROM statement
 
-7. Flowgraph and Replication Artefacts Changes are not supported
+7. Flowgraph and Replication Artifacts Changes are not supported
 
 
 ## How to Obtain Support
