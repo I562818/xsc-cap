@@ -56,7 +56,7 @@ The SAP HANA Application Migration Assistant converts the source XSC application
 
 
 <p align="center">
-![cc2](https://github.com/I562818/xsc-cap/assets/159874418/519ccdfc-a72d-47d0-bb12-d4a04b6f0195)
+	<img src="https://github.com/I562818/xsc-cap/assets/159874418/519ccdfc-a72d-47d0-bb12-d4a04b6f0195" width="600" height="400">
 </p>
 
 
@@ -77,7 +77,7 @@ The SAP HANA Application Migration Assistant converts the source XSC application
    7. Principal Type: None  
 		
 <p align="center">
-![cc3](https://github.com/I562818/xsc-cap/assets/159874418/5abe85af-58ed-4b5d-94de-54c1f7890b9a)
+	<img src="https://github.com/I562818/xsc-cap/assets/159874418/5abe85af-58ed-4b5d-94de-54c1f7890b9a" width="600" height="400">
 </p>
 	
 
@@ -109,7 +109,7 @@ The SAP HANA Application Migration Assistant converts the source XSC application
    3. WebIDEUsage : xs_hdb 
 	
 <p align="center">
-![btp1](https://github.com/I562818/xsc-cap/assets/159874418/1ddbb09a-19e2-47d8-94ab-e62ff4f5d6ed)
+	<img src="https://github.com/I562818/xsc-cap/assets/159874418/1ddbb09a-19e2-47d8-94ab-e62ff4f5d6ed" width="600" height="400">
 </p>
 	
 
