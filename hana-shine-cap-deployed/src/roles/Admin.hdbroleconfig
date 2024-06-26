@@ -1,7 +1,7 @@
 {
     "SAP_HANA_DEMOCONTENT_EPM_ROLES_ADMIN": {
-        "446D3A4D9D44412DBA47FF234B7736DB": {
-            "schema": "446D3A4D9D44412DBA47FF234B7736DB"
+        "<schema_ID>": {
+            "schema": "<schema_ID>"
         }
     }
 }

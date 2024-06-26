@@ -203,6 +203,211 @@
 <img src="https://github.wdf.sap.corp/storage/user/128039/files/47e72bfc-a1bf-47a4-baff-67087e3278e0" width="350" height="220">
 </p>
 
+
+# Deployment steps post migration
+Note: These steps are relevant for the HCO_DEMOCONTENT delivery unit
+### Step 1:
+
+- Under **SAP HANA Projects** section in your dev space, the project's database connection and artifacts will be visible
+<p align="center">
+<img width="420" alt="img" src="https://github.wdf.sap.corp/storage/user/106842/files/40c7f890-32a0-47a6-8ccb-41c2554fb25d">
+</p>
+
+- Please login to your cloud foundry account using the following steps:
+  - Open a new terminal in Business Application Studio
+  - Enter the command ```cf login -a API_URL``` and enter your username and password
+	
+- Under **Database Connections**, click ```bind``` and click on ```Bind to an HDI container```. Once this is successfully bound you will see ```.env``` file with the VCAP services is created inside db folder of the project.
+- Inside ```.env```, from VCAP services extract the value of ```currentschema```, this is your schema name.
+- Click on the open hdi container, then database explorer will be opened 
+<p align="center">
+<img width="433" alt="img" src="https://github.wdf.sap.corp/storage/user/106842/files/2ccc2453-6d96-4069-b4a2-932da8713f2b">
+</p>
+
+- Please open sql console with the DBADMIN user or admin privileges.
+- Execute the following query in HANA Cloud to grant access: “9FFEDFB3459645918EEC7CC85078FD28” should be replaced with your schema name
+```
+GRANT SELECT ON SCHEMA "_SYS_BI" TO "9FFEDFB3459645918EEC7CC85078FD28#OO";
+
+GRANT SELECT ON "_SYS_BI"."M_TIME_DIMENSION" TO "9FFEDFB3459645918EEC7CC85078FD28#OO";
+
+GRANT UPDATE ON "_SYS_BI"."M_TIME_DIMENSION" TO "9FFEDFB3459645918EEC7CC85078FD28#OO" WITH GRANT OPTION;
+
+GRANT INSERT, SELECT, UPDATE ON "_SYS_BI"."M_TIME_DIMENSION" TO "9FFEDFB3459645918EEC7CC85078FD28#OO" WITH GRANT OPTION;
+
+GRANT SELECT ON SCHEMA "_SYS_BI" TO "9FFEDFB3459645918EEC7CC85078FD28#OO" WITH GRANT OPTION;
+```
+	
+### Step 2:
+1. Delete uis folder from db/cfg
+2. Delete ```synonym-grantor-service.hdbgrants``` and ```synonym-grantor-service.hdbsynonymconfig``` from db/cfg
+3. Delete ```synonym-grantor-service.hdbsynonym``` from db/src/uis/db
+
+Reason: UIS is part of another schema so need to migrate before migrating shine DU and use UIS folder, as of now you can remove it. To use the other container objects, please follow the help documentation of hana-cloud and configure them.
+
+	
+### Step 3:
+We need to change the file ```db/src/synonym-grantor-service.hdbsynonym``` with the following configuration:
+```
+{
+    "SAP_HANA_DEMOCONTENT_EPM_DUMMY": {
+        "target": {
+        "schema": "SYS",
+        "object": "DUMMY"
+        }
+    },
+    "SAP_HANA_DEMOCONTENT_EPM_M_TIME_DIMENSION": {
+        "target": {
+        "schema": "_SYS_BI",
+        "object": "M_TIME_DIMENSION"
+        }
+    },
+    "M_TIME_DIMENSION":{
+        "target": {
+        "schema": "_SYS_BI",
+        "object": "M_TIME_DIMENSION"
+        }
+    }
+}
+```
+	
+Reason: To grant access to the schemas SYS and _SYS_BI, to access the objects we need to add the above configuration in db/src/synonym-grantor-service.hdbsynonym 
+
+### Step 4:
+Remove the unused configuration from ```db/src/defaults/default_access_role.hdbrole```: "SAP_HANA_DEMOCONTENT_EPM_MIGRATION_ALL_ANALYTIC_PRIV" 
+
+Reason: We can remove this privilege or add all the privileges into one single privilege. 
+
+### Step 5:
+Give the correct name for the entities in the file: ```db/src/models/PURCHASE_COMMON_CURRENCY.hdbcalculationview``` 
+
+On line 181 of the file, replace TCURR with SAP_HANA_DEMOCONTENT_EPM_DATA_CONVERSIONS_TCURR Migrated file is as follows: <currencyConversionTables rates="TCURR" configuration="TCURV" prefactors="TCURF" notations="TCURN" precisions="TCURX"/>
+
+Should be changed as follows: 
+```
+<currencyConversionTables rates="SAP_HANA_DEMOCONTENT_EPM_DATA_CONVERSIONS_TCURR" configuration="SAP_HANA_DEMOCONTENT_EPM_DATA_CONVERSIONS_TCURV" prefactors="SAP_HANA_DEMOCONTENT_EPM_DATA_CONVERSIONS_TCURF" notations="SAP_HANA_DEMOCONTENT_EPM_DATA_CONVERSIONS_TCURN" precisions="SAP_HANA_DEMOCONTENT_EPM_DATA_CONVERSIONS_TCURX"/>
+```
+	
+### Step 6:
+1. Remove the unused configurations from the ```db/src/roles/User.hdbrole``` file 
+```
+{
+    "reference": "_SYS_BIC",
+    "privileges": [
+        "EXECUTE",
+        "SELECT"
+    ]
+},
+{
+    "reference": "_SYS_REPO",
+    "privileges": [
+        "EXECUTE",
+        "SELECT"
+    ]
+},
+{
+    "reference": "_SYS_RT",
+    "privileges": [
+        "SELECT"
+    ]
+}
+```
+	
+Reason: Having granted access by executing the SQL commands in ```Step 1```, we now have the option to either remove the current configuration in hdbrole, or modify the hdbrole file with supported options.
+
+	
+### Step 7:
+Remove the unused configurations from ```db/src/roles/Admin.hdbrole```
+```
+{
+    "name": "REPOSITORY_REST",
+    "type": "PROCEDURE",
+    "privileges": 
+        [
+            "EXECUTE"
+        ]
+}
+```
+
+Reason: Roles are not required for executing procedure in the same container rather we can add authorization based on users in CAP.
+
+	
+### Step 8:
+In db/src/roles/Admin.hdbrole, replace the existing ```schema_privileges``` and add ```schema_analytic_privileges``` (replace 9FFEDFB3459645918EEC7CC85078FD28 with your schema name)
+```
+"schema_privileges": [
+   {
+      "reference": "9FFEDFB3459645918EEC7CC85078FD28",
+      "privileges": [
+         "SELECT METADATA",
+         "SELECT CDS METADATA",
+         "SELECT",
+         "INSERT",
+         "EXECUTE",
+         "DELETE",
+         "UPDATE",
+         "CREATE TEMPORARY TABLE"
+      ]
+   }
+],
+"schema_analytic_privileges": [
+   {
+      "schema_reference": "9FFEDFB3459645918EEC7CC85078FD28",
+      "privileges": [
+         "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_SALES_ORDER_6",
+         "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_SALES_ORDER",
+         "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_SALES_ORDER_1",
+         "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_SALES_ORDER_2",
+         "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_SALES_ORDER_4",
+         "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_SALES_ORDER_12",
+         "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_SALES_ORDER_3",
+         "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_SALES_ORDER_9",
+         "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_PURCHASE_ORDER_2",
+         "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_SALES_ORDER_10",
+         "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_PURCHASE_ORDER_PROD_CAT_1",
+         "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_SALES_ORDER_16",
+         "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_PURCHASE_ORDER_3",
+         "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_PURCHASE_ORDER_PROD_CAT_1_1054430",
+         "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_SALES_ORDER_5",
+         "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_PURCHASE_ORDER_1",
+         "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_SALES_ORDER_7",
+         "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_PURCHASE_ORDER_PROD_CAT_2",
+         "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_PURCHASE_ORDER",
+         "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_PURCHASE_ORDER_PROD_CAT",
+         "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_SALES_ORDER_11",
+         "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_SALES_ORDER_13",
+         "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_SALES_ORDER_15",
+         "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_SALES_ORDER_8",
+         "SAP_HANA_DEMOCONTENT_EPM_MIGRATION_ALL_PRIV",
+         "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_SALES_ORDER_14"
+      ]
+   }
+],
+```
+	
+Reason: We need the above the modification in the hdbrole file to access calculation views with analytical privileges.
+
+### Step 9:
+Create a file named ```Admin.hdbroleconfig``` with the following configuration: (replace 9FFEDFB3459645918EEC7CC85078FD28 with your db schema name) in the path db/src/roles/
+```
+{
+   "SAP_HANA_DEMOCONTENT_EPM_ROLES_ADMIN": {
+      "9FFEDFB3459645918EEC7CC85078FD28": {
+         "schema": "9FFEDFB3459645918EEC7CC85078FD28"
+      }
+   }
+}
+```
+	
+Reason: Providing the permission to the users with admin role to access the schema
+	
+### Step 10:
+To deploy your application, please select the option ```deploy``` in SAP HANA Projects section
+<p align="center">
+<img width="435" alt="MicrosoftTeams-image (15)" src="https://github.wdf.sap.corp/storage/user/106842/files/273fb8d5-b76c-4a05-8c66-40cd7f450053">
+</p>
+
+
 # Limitations
 
 1. Creating proxy cds for “.hdbtable”, “.hdbview”, “.hdbcalculationview”
