@@ -41,7 +41,7 @@ The SAP HANA Application Migration Assistant converts the source XSC application
 	   subscription is created and add the subaccount details  
 
 <p align="center">
-![cc1](https://github.com/I562818/xsc-cap/assets/159874418/57fce0f5-7a68-4484-acf1-fca498b7d430)
+	<img src="https://github.com/I562818/xsc-cap/assets/159874418/6059dc21-0bf9-416d-b372-c8c7f895c7e9" width="600" height="400">
 </p>
 
 5. Choose the subaccount where the source db is present and add a service channel under on-prem to cloud with the following details:  
