@@ -41,7 +41,7 @@ The SAP HANA Application Migration Assistant converts the source XSC application
 	   subscription is created and add the subaccount details  
 
 <p align="center">
-<img src="https://github.wdf.sap.corp/storage/user/128039/files/1db1f985-178a-4b85-adce-71417fcec8b1" width="500" height="300">
+![cc1](https://github.com/I562818/xsc-cap/assets/159874418/57fce0f5-7a68-4484-acf1-fca498b7d430)
 </p>
 
 5. Choose the subaccount where the source db is present and add a service channel under on-prem to cloud with the following details:  
@@ -56,7 +56,7 @@ The SAP HANA Application Migration Assistant converts the source XSC application
 
 
 <p align="center">
-<img src="https://github.wdf.sap.corp/storage/user/128039/files/86f3b93e-e155-4ee4-8f31-49000d6b28db" width="500" height="350">
+![cc2](https://github.com/I562818/xsc-cap/assets/159874418/519ccdfc-a72d-47d0-bb12-d4a04b6f0195)
 </p>
 
 
@@ -77,7 +77,7 @@ The SAP HANA Application Migration Assistant converts the source XSC application
    7. Principal Type: None  
 		
 <p align="center">
-<img src="https://github.wdf.sap.corp/storage/user/128039/files/3ce89ee6-9929-4ab8-8a78-8f6b0b85b25d" width="500" height="350">
+![cc3](https://github.com/I562818/xsc-cap/assets/159874418/5abe85af-58ed-4b5d-94de-54c1f7890b9a)
 </p>
 	
 
@@ -109,7 +109,7 @@ The SAP HANA Application Migration Assistant converts the source XSC application
    3. WebIDEUsage : xs_hdb 
 	
 <p align="center">
-<img src="https://github.wdf.sap.corp/storage/user/128039/files/f1d3639e-15c9-4692-9e55-21bb2fd06fc2" width="500" height="300">
+![btp1](https://github.com/I562818/xsc-cap/assets/159874418/1ddbb09a-19e2-47d8-94ab-e62ff4f5d6ed)
 </p>
 	
 
