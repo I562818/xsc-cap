@@ -1,15 +1,10 @@
-# SAP HANA Application Migration Assistant
+# Introduction
 
-Tool for migrating XS Classic application to XS Advanced Programming Model or Cloud Application Programming Model.  
+1. We use the SAP HANA Application Migration Assistant for migrating XS Classic application to XS Advanced Programming Model or Cloud Application Programming Model.  
 
-## XSC to XSA:  
+2. The SAP HANA Application Migration Assistant converts the source XSC application  to a CAP application with SAP HANA Cloud as a database where the Source XSC Repository  artefacts are converted to the corresponding target CAP artefacts.
 
-The SAP HANA Application Migration Assistant converts the source XS Classic application which is packaged as a Delivery Unit into XS Advanced application which also includes conversion of synchronous XSJS to async-XSJS.
-
-## XSC to CAP:  
-
-The SAP HANA Application Migration Assistant converts the source XSC application  to a CAP application with SAP HANA Cloud as a database where the Source XSC Repository  artefacts are converted to the corresponding target CAP artefacts.
-
+# Using SAP HANA Application Migration Assistant to migrate XSC application to CAP Application
 
 ## Architecture
 
