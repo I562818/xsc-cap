@@ -26,7 +26,7 @@ HCO_DEMOCONTENT follows the XS Classic Programming Model(XSC) and uses SAP HANA 
 ### Solution Diagram
 
 <p align="center">
-<img src="images-ext\TAM.png" width="600" height="400">
+<img src="images\solutionDiagram.png" width="600" height="400">
 </p>
 
 ## Requirements
@@ -65,7 +65,7 @@ We have successfully migrated the HCO_DEMOCONTENT sample delivery unit using the
    -  Now, enter the necessary details for your subaccount - this includes the Region, Subaccount ID, Display Name, Subaccount User, Password, and Location ID. After entering all the information, click on 'Save'.
 
 <p align="center">
-	<img src="images-ext\dest1.png" width="600" height="400">
+	<img src="images\destination1.png" width="600" height="400">
 </p>
 
 4. Select the subaccount where the source database is located, then add a service channel under 'on-prem to cloud' using the following details:  
@@ -79,7 +79,7 @@ We have successfully migrated the HCO_DEMOCONTENT sample delivery unit using the
    - **Connections**: 1
 
 <p align="center">
-	<img src="images-ext\dest2.png" width="600" height="400">
+	<img src="images\destination2.png" width="600" height="400">
 </p>
 
 5. In the SAP Business Technology Platform (BTP) Cloud Foundry account where the Business Application Studio (BAS) subscription is created, select 'Cloud to On-Prem' and add a mapping with the following details:  
@@ -99,7 +99,7 @@ We have successfully migrated the HCO_DEMOCONTENT sample delivery unit using the
    - **Principal Type**: None  
 		
 <p align="center">
-	<img src="images-ext\dest3.png" width="600" height="400">
+	<img src="images\destination3.png" width="600" height="400">
 </p>
 	
 ## Step-2: Setup an SAP BTP Destination to connect to the source system
@@ -120,7 +120,7 @@ And the following additional properties:
  - **WebIDEUsage** : xs_hdb 
 	
 <p align="center">
-	<img src="images-ext\dest4.png" width="600" height="400">
+	<img src="images\destination4.png" width="600" height="400">
 </p>
 
 ## Step-3: Create a SAP Business Application Studio Devspace with the SAP HANA Application Migration Assistant Extension installed  
@@ -142,42 +142,42 @@ And the following additional properties:
 2. When the Migration Assistant Wizard opens, select the migration path. Since we are migrating from XSC to CAP, select `XSC to CAP` as your migration path.		
 
 <p align="center">
-  <img width="536" alt="HomeScreen" src="images-ext\homescreen.png">
+  <img width="536" alt="HomeScreen" src="images\homescreen.png">
 </p>
 
 
 3. In the Data Source page of the wizard, choose the destination you previously created from the dropdown menu. 
 	
 <p align="center">
-  <img width="544" alt="DestinationList" src="images-ext\destList.png">
+  <img width="544" alt="DestinationList" src="images\destinationList.png">
 </p>
 
 4. Enter the user credentials for the SAP HANA Database Migration User - username and password - into their respective fields. Hit the login button to authorize these credentials.
 	
 <p align="center">
-<img width="545" alt="Login" src="images-ext\login.png">
+<img width="545" alt="Login" src="images\login.png">
 </p>
 
 5. To proceed, click on the Next button.  
 		
 <p align="center">
-<img width="545" alt="LoggedIn" src="images-ext\loginenabled.png">
+<img width="545" alt="LoggedIn" src="images\loginEnabled.png">
 </p>
 
 6. In the "Migration Options" page, select "Delivery Unit" or "Package Name" as your source type from the drop-down menu. The SAP HANA Application Migration Assistant supports package level migration as well.
 
 <p align="center">
-<img width="545" alt="selectType" src="images-ext\selectType.png">
+<img width="545" alt="selectType" src="images\selectType.png">
 </p>
   
 7. Enter the name of your Source Delivery Unit in this case, it would be `HCO_DEMOCONTENT` or Source Package Name which will be `sap.hana.democontent.epm.data:true`. 	
 
 <p align="center">
-<img width="545" alt="DU1" src="images-ext\DU1.png">
+<img width="545" alt="DU1" src="images\DeliveryUnit1.png">
 </p>
 
 <p align="center">
-<img width="545" alt="package" src="images-ext\packageExample1.png">
+<img width="545" alt="package" src="images\packageExample1.png">
 </p>
 
 8. Choose the target directory. This is where the migration results will be stored.
@@ -185,19 +185,19 @@ And the following additional properties:
    **Note:** Ensure that the directory you select is a sub-directory of `/home/user/projects`.	
 
 <p align="center">
-<img width="545" alt="DU2" src="images-ext\DU2.png">
+<img width="545" alt="DU2" src="images\DeliveryUnit2.png">
 </p>
 
 9. Specify a unique name for the Target Folder, where the migration results will be saved. Once you've entered the name, click on Finish.
 
 <p align="center">
-<img width="545" alt="end" src="images-ext\DU3.png">
+<img width="545" alt="end" src="images\DeliveryUnit3.png">
 </p>
 
 10. Once you see the pop-up notification at the bottom right corner of your screen, it means that the migration process is underway. This notification will keep you updated on all the steps that follow. At the end of the process, a CAP project with the revised database artifacts will be created. Additionally, a `report.html` file will be generated within the project. This file contains detailed information about your project's migration.
 
 <p align="center">
-<img width="545" alt="end" src="images-ext\end2.png">
+<img width="545" alt="end" src="images\end.png">
 </p>
 
 ## Step-5: Post Migration Changes
