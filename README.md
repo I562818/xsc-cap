@@ -26,7 +26,7 @@ HCO_DEMOCONTENT follows the XS Classic Programming Model(XSC) and uses SAP HANA 
 ### Solution Diagram
 
 <p align="center">
-<img src="https://github.wdf.sap.corp/storage/user/131107/files/108b8b5a-2ac4-41fb-be56-bef892f660f5" width="600" height="400">
+<img src="images-ext\TAM.png" width="600" height="400">
 </p>
 
 ## Requirements
@@ -60,7 +60,7 @@ We have successfully migrated the HCO_DEMOCONTENT sample delivery unit using the
 3. Once you've successfully logged in, you should set up two connections in the Cloud Connector. The first connection should link to the subaccount with the source database, and the second connection should be for the target subaccount with the SAP Hana Cloud. To establish these connections, click on the connector button in the left menu. Now, enter the necessary details for your subaccount - this includes the Region, Subaccount ID, Display Name, Subaccount User, Password, and Location ID. After entering all the information, click on 'Save'.
 
 <p align="center">
-	<img src="https://github.com/I562818/xsc-cap/assets/159874418/6059dc21-0bf9-416d-b372-c8c7f895c7e9" width="600" height="400">
+	<img src="images-ext\dest1.png" width="600" height="400">
 </p>
 
 4. Select the subaccount where the source database is located, then add a service channel under 'on-prem to cloud' using the following details:  
@@ -74,7 +74,7 @@ We have successfully migrated the HCO_DEMOCONTENT sample delivery unit using the
    - **Connections**: 1
 
 <p align="center">
-	<img src="https://github.com/I562818/xsc-cap/assets/159874418/519ccdfc-a72d-47d0-bb12-d4a04b6f0195" width="600" height="400">
+	<img src="images-ext\dest2.png" width="600" height="400">
 </p>
 
 5. In the SAP Business Technology Platform (BTP) Cloud Foundry account where the Business Application Studio (BAS) subscription is created, select 'Cloud to On-Prem' and add a mapping with the following details:  
@@ -94,7 +94,7 @@ We have successfully migrated the HCO_DEMOCONTENT sample delivery unit using the
    - **Principal Type**: None  
 		
 <p align="center">
-	<img src="https://github.com/I562818/xsc-cap/assets/159874418/5abe85af-58ed-4b5d-94de-54c1f7890b9a" width="600" height="400">
+	<img src="images-ext\dest3.png" width="600" height="400">
 </p>
 	
 ## Step-2: Setup an SAP BTP Destination to connect to the source system
@@ -115,7 +115,7 @@ And the following additional properties:
  - **WebIDEUsage** : xs_hdb 
 	
 <p align="center">
-	<img src="https://github.com/I562818/xsc-cap/assets/159874418/1ddbb09a-19e2-47d8-94ab-e62ff4f5d6ed" width="600" height="400">
+	<img src="images-ext\dest4.png" width="600" height="400">
 </p>
 
 ## Step-3: Create a SAP Business Application Studio Devspace with the SAP HANA Application Migration Assistant Extension installed  
@@ -137,34 +137,38 @@ And the following additional properties:
 2. When the Migration Assistant Wizard opens, select the migration path. Since we are migrating from XSC to CAP, select `XSC to CAP` as your migration path.		
 
 <p align="center">
-  <img width="536" alt="MicrosoftTeams-image (22)" src="https://github.com/I562818/xsc-cap/assets/159874418/f9af13e0-08f5-44f3-ba27-c511f89e675e">
+  <img width="536" alt="HomeScreen" src="images-ext\homescreen.png">
 </p>
 
 
 3. In the Data Source page of the wizard, choose the destination you previously created from the dropdown menu. 
 	
 <p align="center">
-  <img width="544" alt="MicrosoftTeams-image (23)" src="https://github.com/I562818/xsc-cap/assets/159874418/7a00a7af-f6db-408a-8b36-9a7d2184cc7f">
+  <img width="544" alt="DestinationList" src="images-ext\destList.png">
 </p>
 
 4. Enter the user credentials for the SAP HANA Database Migration User - username and password - into their respective fields. Hit the login button to authorize these credentials.
 	
 <p align="center">
-<img width="545" alt="MicrosoftTeams-image (24)" src="https://github.com/I562818/xsc-cap/assets/159874418/373cf1ed-b503-47e5-96e9-1f42d7ac1f3d">
+<img width="545" alt="Login" src="images-ext\login.png">
 </p>
 
 5. To proceed, click on the Next button.  
 		
 <p align="center">
-<img src="https://github.wdf.sap.corp/storage/user/128039/files/a3ee9d97-3ee6-48f8-91c0-6ee76f7f8db8" width="300" height="200">
+<img width="545" alt="LoggedIn" src="images-ext\loginenabled.png">
 </p>
 
-6. In the "Migration Options" page, select "Delivery Unit" as your source type from the drop-down menu.
+6. In the "Migration Options" page, select "Delivery Unit" or "Package Name" as your source type from the drop-down menu. The SAP HANA Application Migration Assistant supports package level migration as well.
+
+<p align="center">
+<img width="545" alt="selectType" src="images-ext\selectType.png">
+</p>
   
 7. Enter the name of your Source Delivery Unit - in this case, it would be `HCO_DEMOCONTENT`.	
 
 <p align="center">
-<img src="https://github.wdf.sap.corp/storage/user/128039/files/c50cbf48-2d80-49cd-9a01-c7dac60bfdc6" width="500" height="300">
+<img width="545" alt="DU1" src="images-ext\DU1.png">
 </p>
 
 8. Choose the target directory. This is where the migration results will be stored.
@@ -172,19 +176,19 @@ And the following additional properties:
    **Note:** Ensure that the directory you select is a sub-directory of `/home/user/projects`.	
 
 <p align="center">
-<img src="https://github.wdf.sap.corp/storage/user/128039/files/61026d83-a977-4879-bb0e-bb6abb2efdcf" width="500" height="320">
+<img width="545" alt="DU2" src="images-ext\DU2.png">
 </p>
 
 9. Specify a unique name for the Target Folder, where the migration results will be saved. Once you've entered the name, click on Finish.
 
 <p align="center">
-<img src="https://github.wdf.sap.corp/storage/user/128039/files/431d9a83-7e13-4383-b995-34967a0a4c68" width="550" height="400">
+<img width="545" alt="end" src="images-ext\DU3.png">
 </p>
 
 10. Once you see the pop-up notification at the bottom right corner of your screen, it means that the migration process is underway. This notification will keep you updated on all the steps that follow. At the end of the process, a CAP project with the revised database artifacts will be created. Additionally, a `report.html` file will be generated within the project. This file contains detailed information about your project's migration.
 
 <p align="center">
-<img src="https://github.wdf.sap.corp/storage/user/128039/files/47e72bfc-a1bf-47a4-baff-67087e3278e0" width="350" height="220">
+<img width="545" alt="end" src="images-ext\end2.png">
 </p>
 
 ## Step-5: Post Migration Changes
