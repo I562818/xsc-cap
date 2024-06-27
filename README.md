@@ -1,6 +1,6 @@
 # XS Classic Programming Model To SAP Cloud Application Programming Model Migration Using SAP HANA Application Migration Assistant
  
-The SAP HANA Application Migration Assistant converts the source XS Classic application which is packaged as a Delivery Unit to a CAP application with SAP HANA Cloud as a database where the Source XSC Repository artifacts are converted to the corresponding target CAP artifacts.
+The SAP HANA Application Migration Assistant converts the source XS Classic application which is packaged as a Delivery Unit or a Package to a CAP application with SAP HANA Cloud as a database where the Source XSC Repository artifacts are converted to the corresponding target CAP artifacts.
 
 ## Introduction
 SAP HANA Interactive Education or SHINE is a demo application that is packaged as [HCO_DEMOCONTENT](https://github.com/SAP-samples/hana-shine/releases/download/v2.5.0/HCO_DEMOCONTENT-1.205.0.tgz) Delivery Unit. It includes the following features:
@@ -46,9 +46,11 @@ We have successfully migrated the HCO_DEMOCONTENT sample delivery unit using the
 6. Deployment of the Migrated database artifacts.
 
 #### **Note:** 
-#### 1. SAP HANA Application Migration Assistant covers only the migration of the database artifacts from SAP Hana on-premise to SAP Hana Cloud.
-#### 2. The migration steps should be tested in a development environment before production.
-#### 3. This guide is directed at single-tenant-applications.
+```
+1. SAP HANA Application Migration Assistant covers only the migration of the database artifacts from SAP Hana on-premise to SAP Hana Cloud.
+2. The migration steps should be tested in a development environment before production.
+3. This guide is directed at single-tenant-applications.
+```
 
 ## Steps
 ## Step-1: Install and Configure the SAP Cloud Connector
@@ -57,7 +59,10 @@ We have successfully migrated the HCO_DEMOCONTENT sample delivery unit using the
   
 2. After installing the cloud connector, you can access it by opening your web browser and going to `https://localhost:<port-no>/`. Use your credentials to log in.
    
-3. Once you've successfully logged in, you should set up two connections in the Cloud Connector. The first connection should link to the subaccount with the source database, and the second connection should be for the target subaccount with the SAP Hana Cloud. To establish these connections, click on the connector button in the left menu. Now, enter the necessary details for your subaccount - this includes the Region, Subaccount ID, Display Name, Subaccount User, Password, and Location ID. After entering all the information, click on 'Save'.
+3. Once you've successfully logged in, you should set up two connections in the Cloud Connector.
+   -  The first connection should link to the subaccount with the source database, and the second connection should be for the target subaccount with the SAP Hana Cloud. To establish these connections, click on the connector button in the left menu. 
+
+   -  Now, enter the necessary details for your subaccount - this includes the Region, Subaccount ID, Display Name, Subaccount User, Password, and Location ID. After entering all the information, click on 'Save'.
 
 <p align="center">
 	<img src="images-ext\dest1.png" width="600" height="400">
@@ -165,10 +170,14 @@ And the following additional properties:
 <img width="545" alt="selectType" src="images-ext\selectType.png">
 </p>
   
-7. Enter the name of your Source Delivery Unit - in this case, it would be `HCO_DEMOCONTENT`.	
+7. Enter the name of your Source Delivery Unit in this case, it would be `HCO_DEMOCONTENT` or Source Package Name which will be `sap.hana.democontent.epm.data:true`. 	
 
 <p align="center">
 <img width="545" alt="DU1" src="images-ext\DU1.png">
+</p>
+
+<p align="center">
+<img width="545" alt="package" src="images-ext\packageExample1.png">
 </p>
 
 8. Choose the target directory. This is where the migration results will be stored.
@@ -352,7 +361,8 @@ Once the project is created, there are some adjustments we need to make manually
    
 6. Open an SQL console with your DBADMIN user or with admin privileges.
    
-7. Run the following query in SAP HANA Cloud to grant access: <Schema Name> should be replaced with your specific schema name.
+7. Run the following query in SAP HANA Cloud to grant access: <Schema Name> should be replaced with your specific schema name. You can also create roles and grant file for granting access.
+
    ```
    GRANT SELECT ON SCHEMA "_SYS_BI" TO "< Schema Name >#OO";
 
