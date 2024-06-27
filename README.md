@@ -1,429 +1,384 @@
-# Introduction
+# XS Classic Programming Model To SAP Cloud Application Programming Model Migration Using SAP HANA Application Migration Assistant
+ 
+The SAP HANA Application Migration Assistant converts the source XS Classic application which is packaged as a Delivery Unit to a CAP application with SAP HANA Cloud as a database where the Source XSC Repository artifacts are converted to the corresponding target CAP artifacts.
 
-1. We use the SAP HANA Application Migration Assistant for migrating XS Classic application to XS Advanced Programming Model or Cloud Application Programming Model.  
+## Introduction
+SAP HANA Interactive Education or SHINE is a demo application that is packaged as [HCO_DEMOCONTENT](https://github.com/SAP-samples/hana-shine/releases/download/v2.5.0/HCO_DEMOCONTENT-1.205.0.tgz) Delivery Unit. It includes the following features:
+- **HDI Features:**
+  - Table
+  - HDBDD Views
+  - Sequence
+  - Calculation Views
+  - Analytical Views
+  - Attribute Views
+  - Associations
+  - Table Functions
+  - Synonyms
+  - Procedures
+  - Spatial Features
+  - Local Time Data Generation
+  - Index
+  - Structured Privilege
+  - Analytical Privilege
 
-2. The SAP HANA Application Migration Assistant converts the source XSC application  to a CAP application with SAP HANA Cloud as a database where the Source XSC Repository  artifacts are converted to the corresponding target CAP artifacts.
-
-# Using SAP HANA Application Migration Assistant to migrate XSC application to CAP Application
-
-## Architecture
+HCO_DEMOCONTENT follows the XS Classic Programming Model(XSC) and uses SAP HANA on-premise for the database. This article describes the steps to be followed to Migrate this Delivery Unit from XSC to the Cloud Application Programming Model(CAP) with SAP HANA Cloud as the database using the SAP HANA Application Migration Assistant.
 
 ### Solution Diagram
 
 <p align="center">
-<img src="https://github.wdf.sap.corp/storage/user/131107/files/108b8b5a-2ac4-41fb-be56-bef892f660f5" width="600" height="400">
+<img src="images-ext\TAM.png" width="600" height="400">
 </p>
 
-## Prerequisites
+## Requirements
+- XSC on-premise database source system with the [HCO_DEMOCONTENT](https://github.com/SAP-samples/hana-shine/releases/download/v2.5.0/HCO_DEMOCONTENT-1.205.0.tgz) delivery unit.
+- SAP Business Technology Platform subaccount with `SAP Hana Cloud` and `SAP Hana Schemas and HDI Containers` service instances .
+- SAP Business Application Studio Subscription.
+- SAP Cloud Connector
 
-* SAP Cloud Connector
-* SAP BTP account
-* SAP Business Application Studio
+## Where to Start
+We have successfully migrated the HCO_DEMOCONTENT sample delivery unit using the SAP HANA Application Migration Assistant. The path followed for this Migration involves the below steps:
 
-## Configuration
+1. Install and Configure the SAP Cloud Connector.
+2. Setup an SAP BTP Destination to connect to the source system.
+3. Create a SAP Business Application Studio Devspace with the SAP HANA Application Migration Assistant Extension installed.
+4. Migrate using the SAP HANA Application Migration Assistant.
+5. Post Migration Changes.
+6. Deployment of the Migrated database artifacts.
 
-### Install SAP Cloud Connector
+#### **Note:** 
+#### 1. SAP HANA Application Migration Assistant covers only the migration of the database artifacts from SAP Hana on-premise to SAP Hana Cloud.
+#### 2. The migration steps should be tested in a development environment before production.
+#### 3. This guide is directed at single-tenant-applications.
 
-1. Install Cloud Connector to your local system from [Cloud-Connector](https://tools.hana.ondemand.com/#cloud)
+## Steps
+## Step-1: Install and Configure the SAP Cloud Connector
 
-2. Refer to the help documentation https://help.sap.com/docs/connectivity/sap-btp-connectivity-cf/installation?locale=en-US 
-  	   for the installation and prerequisites for cloud connector setup.  
+1. Install the [SAP Cloud Connector](https://tools.hana.ondemand.com/#cloud) on your local system. For the installation and setup of the cloud connector, please refer to this [Documentation](https://help.sap.com/docs/connectivity/sap-btp-connectivity-cf/installation?locale=en-US).  
   
-3. Once the cloud connector is installed, open it in the browser on the port setup as https://localhost:<port-no>/ and login with the correct 
-	   credentials
-	
-4. Click on connector in the left menu and add your subaccount which has the source database and also add the subaccount where the bas 
-	   subscription is created and add the subaccount details  
+2. After installing the cloud connector, you can access it by opening your web browser and going to `https://localhost:<port-no>/`. Use your credentials to log in.
+   
+3. Once you've successfully logged in, you should set up two connections in the Cloud Connector. The first connection should link to the subaccount with the source database, and the second connection should be for the target subaccount with the SAP Hana Cloud. To establish these connections, click on the connector button in the left menu. Now, enter the necessary details for your subaccount - this includes the Region, Subaccount ID, Display Name, Subaccount User, Password, and Location ID. After entering all the information, click on 'Save'.
 
 <p align="center">
-	<img src="https://github.com/I562818/xsc-cap/assets/159874418/6059dc21-0bf9-416d-b372-c8c7f895c7e9" width="600" height="400">
+	<img src="images-ext\dest1.png" width="600" height="400">
 </p>
 
-5. Choose the subaccount where the source db is present and add a service channel under on-prem to cloud with the following details:  
+4. Select the subaccount where the source database is located, then add a service channel under 'on-prem to cloud' using the following details:  
 	
-   1. Type: HANA Database  
+   - **Type**: HANA Database
 	
-   2. HANA Instance Name: <DB/Schema ID>  
+   - **HANA Instance Name**: < DB/Schema ID >
 	
-   3. Local Instance Number: any number from 00 to 09( this is a double digit number which is used to compute the port number to access sap 			instance in hana cloud, local port is derived from local instance no 3<n<15, for eg if no=7, then local port = 30715)  
+   - **Local Instance Number**: Input any two-digit number between 00 and 09. This number is used to compute the port number needed to access the SAP instance in the Hana Cloud. The local port is calculated from the local instance number (3<n<15). For example, if the number is 7, then the local port would be 30715.
 	
-   4. Connections: 1  
-
+   - **Connections**: 1
 
 <p align="center">
-	<img src="https://github.com/I562818/xsc-cap/assets/159874418/519ccdfc-a72d-47d0-bb12-d4a04b6f0195" width="600" height="400">
+	<img src="images-ext\dest2.png" width="600" height="400">
 </p>
 
-
-6. In the BTP cf account where the BAS subscription is created, choose cloud to on prem and add mapping with the following details:  
+5. In the SAP Business Technology Platform (BTP) Cloud Foundry account where the Business Application Studio (BAS) subscription is created, select 'Cloud to On-Prem' and add a mapping with the following details:  
 	
-   1. Back-end Type: SAP Hana  
+   - **Back-end Type**: SAP Hana  
 	
-   2. Protocol: TCP  
+   - **Protocol**: TCP  
 	
-   3. Internal Host: localhost  
+   - **Internal Host**: localhost  
 	
-   4. Internal Port: <portno>(derived from local instance number)  
+   - **Internal Port**: < portno > (The port number derived from your local instance number)  
 	
-   5. Virtual Host: myvirtualhost  
+   - **Virtual Host**: myvirtualhost  
 	
-   6. Virtual Port: same as internal port  
+   - **Virtual Port**: This should be the same as your internal port
 	
-   7. Principal Type: None  
+   - **Principal Type**: None  
 		
 <p align="center">
-	<img src="https://github.com/I562818/xsc-cap/assets/159874418/5abe85af-58ed-4b5d-94de-54c1f7890b9a" width="600" height="400">
+	<img src="images-ext\dest3.png" width="600" height="400">
 </p>
 	
-
-
-### Setup BTP Destination
+## Step-2: Setup an SAP BTP Destination to connect to the source system
   
-1. Go to the BTP cf subaccount and select destination from Connectivity from the left menu pane and create a new destination with the following  	    details: 
+Navigate to the BTP Cloud Foundry subaccount and select 'Destination' under 'Connectivity' from the left menu pane. Create a new destination using the following details:
+ 
+ - **Name**: < Destination name >
+ - **Type**: HTTP
+ - **URL**: `https://<internal-host>:<internal-port-no>/`
+ - **ProxyType**: on-premise
+ - **Authentication**: Basic Authentication
+ - **Locationid**: Location id as mentioned in cloud connector
+ - **User and Password**: SAP Hana Database login credentials 
 
-   1. Name: <destination name>
-
-   2. Type: HTTP
-
-   3. URL: "https://<internal-host>:<internal-port-no>/" 
-
-   4. ProxyType: on-premise
-
-   5. Authentication: Basic Authentication 
-
-   6. Locationid: Location id as mentioned in cloud connector
-
-   7. User and Password: Hana Db login credentials 
-
- And the following additional properties: 
-
-   1. HTML5.DynamicDestination : true 
-
-   2. WebIDEEnabled : true 
-
-   3. WebIDEUsage : xs_hdb 
+And the following additional properties: 
+ - **HTML5.DynamicDestination** : true
+ - **WebIDEEnabled** : true
+ - **WebIDEUsage** : xs_hdb 
 	
 <p align="center">
-	<img src="https://github.com/I562818/xsc-cap/assets/159874418/1ddbb09a-19e2-47d8-94ab-e62ff4f5d6ed" width="600" height="400">
+	<img src="images-ext\dest4.png" width="600" height="400">
 </p>
+
+## Step-3: Create a SAP Business Application Studio Devspace with the SAP HANA Application Migration Assistant Extension installed  
 	
+1. In the sub-account where you created the destination, establish a subscription to SAP Business Application Studio (BAS).
 
+2. Open the BAS from the subscription and select "Create Dev Space". Assign a desired name to your Dev Space and select the "Full Stack Cloud Application" type. Then, choose the `SAP HANA Application Migration Assistant` Extension to help with migration, as well as the `SAP Hana Tools` Extension which will be required later for deployment. Finally, click on "Create Dev Space".
+   
+3. Wait for the status of your newly created Dev Space to change to "Running". Once it's running, you can open it by clicking on the name of the Dev space that you just created.
+   
+4. Navigate to the folder by clicking on File -> Open Folder. Enter the path `/home/user/projects/` and click on OK.
+   
+5. Once the folder opens, you can select the SAP HANA Application Migration Assistant from the Command Palette (You can access the Command Palette from View -> Command Palette).
 
-### BAS Configuration:  
+## Step-4: Migrate using the SAP HANA Application Migration Assistant
+
+1. Open the the Command Palette and type "SAP HANA Application Migration Assistant" and select the command when it appears.
 	
-1. In the sub-account that the destination is present, create a subscription to SAP Business Application Studio.  
-	
-
-2. Open BAS from this subscription and select “Create DevSpace”, give it a name and choose the appropriate application type and then select SAP 	   HANA Application Migration Assistant Extension.  
-
-
-3. Open the DevSpace and create a new workspace, then select the SAP HANA Application Migration Assistant from the Command Palette (View->Command 	     Palette or (Ctrl+Shift+P).  
-	
-
-# SAP HANA Application Migration Assistant
-
-## How to launch Guided Development
-
-	Use Command Palette -> CMD/CTRL + Shift + P
-	
-	Type command -> SAP HANA Application Migration Assistant
-	
-1. Select the Migration Path - XSC->XSA or XSC->CAP.  	
-	
+2. When the Migration Assistant Wizard opens, select the migration path. Since we are migrating from XSC to CAP, select `XSC to CAP` as your migration path.		
 
 <p align="center">
-  <img width="536" alt="MicrosoftTeams-image (22)" src="https://github.com/I562818/xsc-cap/assets/159874418/f9af13e0-08f5-44f3-ba27-c511f89e675e">
+  <img width="536" alt="HomeScreen" src="images-ext\homescreen.png">
 </p>
 
 
-
-2. Configure the Data Source:  
-	
-   Select your Destination from the dropdown.  
-	
-	
-
-<p align="center">
-  <img width="544" alt="MicrosoftTeams-image (23)" src="https://github.com/I562818/xsc-cap/assets/159874418/7a00a7af-f6db-408a-8b36-9a7d2184cc7f">
-</p>
-
-
-
-
-
-   Enter the Hana DB Credentials for the Technical Username and Password fields and click on login to complete the authentication.
-
+3. In the Data Source page of the wizard, choose the destination you previously created from the dropdown menu. 
 	
 <p align="center">
-<img width="545" alt="MicrosoftTeams-image (24)" src="https://github.com/I562818/xsc-cap/assets/159874418/373cf1ed-b503-47e5-96e9-1f42d7ac1f3d">
+  <img width="544" alt="DestinationList" src="images-ext\destList.png">
 </p>
 
+4. Enter the user credentials for the SAP HANA Database Migration User - username and password - into their respective fields. Hit the login button to authorize these credentials.
+	
+<p align="center">
+<img width="545" alt="Login" src="images-ext\login.png">
+</p>
 
-
-
-   Click on Next.  
+5. To proceed, click on the Next button.  
 		
-
 <p align="center">
-<img src="https://github.wdf.sap.corp/storage/user/128039/files/a3ee9d97-3ee6-48f8-91c0-6ee76f7f8db8" width="300" height="200">
+<img width="545" alt="LoggedIn" src="images-ext\loginenabled.png">
 </p>
 
-	
-3. Enter the Source Delivery Unit name.  	
+6. In the "Migration Options" page, select "Delivery Unit" or "Package Name" as your source type from the drop-down menu.
 
 <p align="center">
-<img src="https://github.wdf.sap.corp/storage/user/128039/files/c50cbf48-2d80-49cd-9a01-c7dac60bfdc6" width="500" height="300">
+<img width="545" alt="selectType" src="images-ext\selectType.png">
 </p>
-	
-
-
-
-
-4. Choose the target directory where the migration results will be stored.  	
+  
+7. Enter the name of your Source Delivery Unit - in this case, it would be `HCO_DEMOCONTENT`.	
 
 <p align="center">
-<img src="https://github.wdf.sap.corp/storage/user/128039/files/61026d83-a977-4879-bb0e-bb6abb2efdcf" width="500" height="320">
+<img width="545" alt="DU1" src="images-ext\DU1.png">
 </p>
 
-
-
-5. Enter the Target Folder name for the migration results folder and click on Finish. 
+8. Choose the target directory. This is where the migration results will be stored.
+   
+   **Note:** Ensure that the directory you select is a sub-directory of `/home/user/projects`.	
 
 <p align="center">
-<img src="https://github.wdf.sap.corp/storage/user/128039/files/431d9a83-7e13-4383-b995-34967a0a4c68" width="550" height="400">
+<img width="545" alt="DU2" src="images-ext\DU2.png">
 </p>
 
-
-
-
-6. You will now see a pop-up at the bottom right of your window mentioning that the migration has started and all the respective steps there onward. 
-
+9. Specify a unique name for the Target Folder, where the migration results will be saved. Once you've entered the name, click on Finish.
 
 <p align="center">
-<img src="https://github.wdf.sap.corp/storage/user/128039/files/47e72bfc-a1bf-47a4-baff-67087e3278e0" width="350" height="220">
+<img width="545" alt="end" src="images-ext\DU3.png">
 </p>
 
+10. Once you see the pop-up notification at the bottom right corner of your screen, it means that the migration process is underway. This notification will keep you updated on all the steps that follow. At the end of the process, a CAP project with the revised database artifacts will be created. Additionally, a `report.html` file will be generated within the project. This file contains detailed information about your project's migration.
 
-# Deployment steps post migration
-Note: These steps are relevant for the HCO_DEMOCONTENT delivery unit
-### Step 1:
-
-- Under **SAP HANA Projects** section in your dev space, the project's database connection and artifacts will be visible
 <p align="center">
-<img width="420" alt="img" src="https://github.wdf.sap.corp/storage/user/106842/files/40c7f890-32a0-47a6-8ccb-41c2554fb25d">
+<img width="545" alt="end" src="images-ext\end2.png">
 </p>
 
-- Please login to your cloud foundry account using the following steps:
-  - Open a new terminal in Business Application Studio
-  - Enter the command ```cf login -a API_URL``` and enter your username and password
-	
-- Under **Database Connections**, click ```bind``` and click on ```Bind to an HDI container```. Once this is successfully bound you will see ```.env``` file with the VCAP services is created inside db folder of the project.
-- Inside ```.env```, from VCAP services extract the value of ```currentschema```, this is your schema name.
-- Click on the open hdi container, then database explorer will be opened 
-<p align="center">
-<img width="433" alt="img" src="https://github.wdf.sap.corp/storage/user/106842/files/2ccc2453-6d96-4069-b4a2-932da8713f2b">
-</p>
-
-- Please open sql console with the DBADMIN user or admin privileges.
-- Execute the following query in HANA Cloud to grant access: “9FFEDFB3459645918EEC7CC85078FD28” should be replaced with your schema name
-```
-GRANT SELECT ON SCHEMA "_SYS_BI" TO "9FFEDFB3459645918EEC7CC85078FD28#OO";
-
-GRANT SELECT ON "_SYS_BI"."M_TIME_DIMENSION" TO "9FFEDFB3459645918EEC7CC85078FD28#OO";
-
-GRANT UPDATE ON "_SYS_BI"."M_TIME_DIMENSION" TO "9FFEDFB3459645918EEC7CC85078FD28#OO" WITH GRANT OPTION;
-
-GRANT INSERT, SELECT, UPDATE ON "_SYS_BI"."M_TIME_DIMENSION" TO "9FFEDFB3459645918EEC7CC85078FD28#OO" WITH GRANT OPTION;
-
-GRANT SELECT ON SCHEMA "_SYS_BI" TO "9FFEDFB3459645918EEC7CC85078FD28#OO" WITH GRANT OPTION;
-```
-	
-### Step 2:
-1. Delete uis folder from db/cfg
-2. Delete ```synonym-grantor-service.hdbgrants``` and ```synonym-grantor-service.hdbsynonymconfig``` from db/cfg
-3. Delete ```synonym-grantor-service.hdbsynonym``` from db/src/uis/db
-
-Reason: UIS is part of another schema so need to migrate before migrating shine DU and use UIS folder, as of now you can remove it. To use the other container objects, please follow the help documentation of hana-cloud and configure them.
-
-	
-### Step 3:
-We need to change the file ```db/src/synonym-grantor-service.hdbsynonym``` with the following configuration:
-```
-{
-    "SAP_HANA_DEMOCONTENT_EPM_DUMMY": {
-        "target": {
-        "schema": "SYS",
-        "object": "DUMMY"
-        }
-    },
-    "SAP_HANA_DEMOCONTENT_EPM_M_TIME_DIMENSION": {
-        "target": {
-        "schema": "_SYS_BI",
-        "object": "M_TIME_DIMENSION"
-        }
-    },
-    "M_TIME_DIMENSION":{
-        "target": {
-        "schema": "_SYS_BI",
-        "object": "M_TIME_DIMENSION"
-        }
-    }
-}
-```
-	
-Reason: To grant access to the schemas SYS and _SYS_BI, to access the objects we need to add the above configuration in db/src/synonym-grantor-service.hdbsynonym 
-
-### Step 4:
-Remove the unused configuration from ```db/src/defaults/default_access_role.hdbrole```: "SAP_HANA_DEMOCONTENT_EPM_MIGRATION_ALL_ANALYTIC_PRIV" 
-
-Reason: We can remove this privilege or add all the privileges into one single privilege. 
-
-### Step 5:
-Give the correct name for the entities in the file: ```db/src/models/PURCHASE_COMMON_CURRENCY.hdbcalculationview``` 
-
-On line 181 of the file, replace TCURR with SAP_HANA_DEMOCONTENT_EPM_DATA_CONVERSIONS_TCURR Migrated file is as follows: <currencyConversionTables rates="TCURR" configuration="TCURV" prefactors="TCURF" notations="TCURN" precisions="TCURX"/>
-
-Should be changed as follows: 
-```
-<currencyConversionTables rates="SAP_HANA_DEMOCONTENT_EPM_DATA_CONVERSIONS_TCURR" configuration="SAP_HANA_DEMOCONTENT_EPM_DATA_CONVERSIONS_TCURV" prefactors="SAP_HANA_DEMOCONTENT_EPM_DATA_CONVERSIONS_TCURF" notations="SAP_HANA_DEMOCONTENT_EPM_DATA_CONVERSIONS_TCURN" precisions="SAP_HANA_DEMOCONTENT_EPM_DATA_CONVERSIONS_TCURX"/>
-```
-	
-### Step 6:
-1. Remove the unused configurations from the ```db/src/roles/User.hdbrole``` file 
-```
-{
-    "reference": "_SYS_BIC",
-    "privileges": [
-        "EXECUTE",
-        "SELECT"
-    ]
-},
-{
-    "reference": "_SYS_REPO",
-    "privileges": [
-        "EXECUTE",
-        "SELECT"
-    ]
-},
-{
-    "reference": "_SYS_RT",
-    "privileges": [
-        "SELECT"
-    ]
-}
-```
-	
-Reason: Having granted access by executing the SQL commands in ```Step 1```, we now have the option to either remove the current configuration in hdbrole, or modify the hdbrole file with supported options.
-
-	
-### Step 7:
-Remove the unused configurations from ```db/src/roles/Admin.hdbrole```
-```
-{
-    "name": "REPOSITORY_REST",
-    "type": "PROCEDURE",
-    "privileges": 
-        [
-            "EXECUTE"
-        ]
-}
-```
-
-Reason: Roles are not required for executing procedure in the same container rather we can add authorization based on users in CAP.
-
-	
-### Step 8:
-In db/src/roles/Admin.hdbrole, replace the existing ```schema_privileges``` and add ```schema_analytic_privileges``` (replace 9FFEDFB3459645918EEC7CC85078FD28 with your schema name)
-```
-"schema_privileges": [
-   {
-      "reference": "9FFEDFB3459645918EEC7CC85078FD28",
-      "privileges": [
-         "SELECT METADATA",
-         "SELECT CDS METADATA",
-         "SELECT",
-         "INSERT",
-         "EXECUTE",
-         "DELETE",
-         "UPDATE",
-         "CREATE TEMPORARY TABLE"
-      ]
-   }
-],
-"schema_analytic_privileges": [
-   {
-      "schema_reference": "9FFEDFB3459645918EEC7CC85078FD28",
-      "privileges": [
-         "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_SALES_ORDER_6",
-         "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_SALES_ORDER",
-         "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_SALES_ORDER_1",
-         "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_SALES_ORDER_2",
-         "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_SALES_ORDER_4",
-         "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_SALES_ORDER_12",
-         "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_SALES_ORDER_3",
-         "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_SALES_ORDER_9",
-         "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_PURCHASE_ORDER_2",
-         "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_SALES_ORDER_10",
-         "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_PURCHASE_ORDER_PROD_CAT_1",
-         "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_SALES_ORDER_16",
-         "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_PURCHASE_ORDER_3",
-         "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_PURCHASE_ORDER_PROD_CAT_1_1054430",
-         "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_SALES_ORDER_5",
-         "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_PURCHASE_ORDER_1",
-         "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_SALES_ORDER_7",
-         "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_PURCHASE_ORDER_PROD_CAT_2",
-         "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_PURCHASE_ORDER",
-         "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_PURCHASE_ORDER_PROD_CAT",
-         "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_SALES_ORDER_11",
-         "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_SALES_ORDER_13",
-         "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_SALES_ORDER_15",
-         "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_SALES_ORDER_8",
-         "SAP_HANA_DEMOCONTENT_EPM_MIGRATION_ALL_PRIV",
-         "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_SALES_ORDER_14"
-      ]
-   }
-],
-```
-	
-Reason: We need the above the modification in the hdbrole file to access calculation views with analytical privileges.
-
-### Step 9:
-Create a file named ```Admin.hdbroleconfig``` with the following configuration: (replace 9FFEDFB3459645918EEC7CC85078FD28 with your db schema name) in the path db/src/roles/
-```
-{
-   "SAP_HANA_DEMOCONTENT_EPM_ROLES_ADMIN": {
-      "9FFEDFB3459645918EEC7CC85078FD28": {
-         "schema": "9FFEDFB3459645918EEC7CC85078FD28"
+## Step-5: Post Migration Changes
+Once the project is created, there are some adjustments we need to make manually as these are not currently handled by the Assistant.
+ 1. If your project contains any files from a different schema, these need to be migrated before migrating the current Delivery Unit and included in this project. If this can't be done immediately, you can remove them for the time being. To utilize objects from other containers, please refer to the HANA Cloud help documentation and configure accordingly.
+    
+    For the HCO_DEMOCONTENT project, make the following changes:
+    - Delete the uis folder from db/cfg
+    - Delete `synonym-grantor-service.hdbgrants` and `synonym-grantor-service.hdbsynonymconfig` from db/cfg
+    - Delete `synonym-grantor-service.hdbsynonym` from db/src/uis/db
+ 2. In order to access objects from other public schemas, you will need to either create a new hdbsynonym file or modify an existing one.
+    For the HCO_DEMOCONTENT project, edit the `db/src/synonym-grantor-service.hdbsynonym` file with the following configuration:
+    ```
+    {
+      "SAP_HANA_DEMOCONTENT_EPM_DUMMY": {
+         "target": {
+           "schema": "SYS",
+           "object": "DUMMY"
+         }
+      },
+      "SAP_HANA_DEMOCONTENT_EPM_M_TIME_DIMENSION": {
+         "target": {
+           "schema": "_SYS_BI",
+           "object": "M_TIME_DIMENSION"
+         }
+      },
+      "M_TIME_DIMENSION":{
+         "target": {
+           "schema": "_SYS_BI",
+           "object": "M_TIME_DIMENSION"
+         }
       }
-   }
-}
-```
-	
-Reason: Providing the permission to the users with admin role to access the schema
-	
-### Step 10:
-To deploy your application, please select the option ```deploy``` in SAP HANA Projects section
-<p align="center">
-<img width="435" alt="MicrosoftTeams-image (15)" src="https://github.wdf.sap.corp/storage/user/106842/files/273fb8d5-b76c-4a05-8c66-40cd7f450053">
-</p>
+    }
+    ```
+ 3. In addition, please take the time to clear out unused role names from the `default_access_role.hdbrole` file located in the db/src/defaults folder. If there are specific roles required for your project, ensure to add them as needed.
+    For the HCO_DEMOCONTENT project, Remove `SAP_HANA_DEMOCONTENT_EPM_MIGRATION_ALL_ANALYTIC_PRIV` role under names. 
+ 4. The assistant will modify the name of the artifacts in your project. Therefore, ensure to update the references to these artifacts accordingly.
+    For the HCO_DEMOCONTENT project, you'll need to adjust the references for entities under the `currencyConversionTables` tag. This is located in the `db/src/models/PURCHASE_COMMON_CURRENCY.hdbcalculationview` file. Make the changes as follows:
+    ```
+    <currencyConversionTables rates="SAP_HANA_DEMOCONTENT_EPM_DATA_CONVERSIONS_TCURR" configuration="SAP_HANA_DEMOCONTENT_EPM_DATA_CONVERSIONS_TCURV" prefactors="SAP_HANA_DEMOCONTENT_EPM_DATA_CONVERSIONS_TCURF" notations="SAP_HANA_DEMOCONTENT_EPM_DATA_CONVERSIONS_TCURN" precisions="SAP_HANA_DEMOCONTENT_EPM_DATA_CONVERSIONS_TCURX"/>
+    ```
+ 5.  Unused configurations should be removed from hdbrole files, or these files should be adjusted to add supported options.
+     For the HCO_DEMOCONTENT project, make the following alterations:
+     - In `db/src/roles/User.hdbrole`, eliminate the following unused configurations:
+       ```
+       {
+    	 "reference": "_SYS_BIC",
+    	 "privileges": [
+            "EXECUTE",
+            "SELECT"
+    	 ]
+       },
+       {
+    	 "reference": "_SYS_REPO",
+    	 "privileges": [
+            "EXECUTE",
+            "SELECT"
+    	 ]
+       },
+       {
+    	 "reference": "_SYS_RT",
+    	 "privileges": [
+            "SELECT"
+    	 ]
+       }
+       ```
+       **Reason**: During the deployment step, access permissions will be granted by executing certain SQL commands.
+       
+     - In `db/src/roles/Admin.hdbrole`, eliminate the following unused configurations:
+       ```
+       {
+    	 "name": "REPOSITORY_REST",
+    	 "type": "PROCEDURE",
+    	 "privileges": 
+         [
+            "EXECUTE"
+         ]
+       }
+       ```
+       **Reason**: Roles are not needed for executing procedures in the same container. Instead, you can add authorization based on users in CAP.
+     - Alter `db/src/roles/Admin.hdbrole` by replacing the existing schema privileges and adding schema analytic privileges:
+       ```
+       "schema_privileges": [
+       {
+      	  "reference": "< Schema Name >",
+      	  "privileges": [
+             "SELECT METADATA",
+             "SELECT CDS METADATA",
+             "SELECT",
+             "INSERT",
+             "EXECUTE",
+             "DELETE",
+             "UPDATE",
+             "CREATE TEMPORARY TABLE"
+      	  ]
+       }
+       ],
+       "schema_analytic_privileges": [
+       {
+      	  "schema_reference": "< Schema Name >",
+      	  "privileges": [
+             "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_SALES_ORDER_6",
+             "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_SALES_ORDER",
+             "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_SALES_ORDER_1",
+             "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_SALES_ORDER_2",
+             "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_SALES_ORDER_4",
+             "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_SALES_ORDER_12",
+             "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_SALES_ORDER_3",
+             "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_SALES_ORDER_9",
+             "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_PURCHASE_ORDER_2",
+             "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_SALES_ORDER_10",
+             "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_PURCHASE_ORDER_PROD_CAT_1",
+             "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_SALES_ORDER_16",
+             "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_PURCHASE_ORDER_3",
+             "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_PURCHASE_ORDER_PROD_CAT_1_1054430",
+             "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_SALES_ORDER_5",
+             "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_PURCHASE_ORDER_1",
+             "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_SALES_ORDER_7",
+             "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_PURCHASE_ORDER_PROD_CAT_2",
+             "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_PURCHASE_ORDER",
+             "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_PURCHASE_ORDER_PROD_CAT",
+             "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_SALES_ORDER_11",
+             "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_SALES_ORDER_13",
+             "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_SALES_ORDER_15",
+             "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_SALES_ORDER_8",
+             "SAP_HANA_DEMOCONTENT_EPM_MIGRATION_ALL_PRIV",
+             "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_SALES_ORDER_14"
+      	  ]
+       }
+       ],
+       ```
+       **Reason**: The modifications in the hdbrole file are needed to access calculation views with analytic privileges.
+ 6. Assign the permission to users with the admin role for accessing the schema.
+    For the HCO_DEMOCONTENT project, create an `Admin.hdbroleconfig` file in the `db/src/roles/` directory. The file should contain the following configuration:
+    ```
+    {
+      "SAP_HANA_DEMOCONTENT_EPM_ROLES_ADMIN": {
+         "< Schema Name >": {
+            "schema": "< Schema Name >"
+         }
+      }
+    }
+    ```
+ 7. Adjust SQL syntax in procedures. For instance, "UPDATE FROM" should be changed to "MERGE INTO", and "TRUNCATE" statements should be replaced with "DELETE FROM" statements.
+ 8. Currently, changes to Flowgraph, Reptask, and Replication artifacts are not covered. You will need to modify these manually. Unsupported types and functions in the calculation view such as "CE_FUNCTION", "CACHE", etc., need to be noted. Please refer to the [HANA Cloud Documentation](https://help.sap.com/docs/hana-cloud/sap-hana-cloud-overview-guide/sap-hana-cloud-overview-guide) for more details on how to handle these.
+    
+## Step-6: Deployment of the Migrated database artifacts.
 
+1. In your dev space, the database connection and artifacts of your project will be visible under the "SAP HANA Projects" section.
+   
+2. Next, log in to your Cloud Foundry account using the following steps:
 
-# Limitations
+   - Open a new terminal in the Business Application Studio
+   - Run the command `cf login -a < API_URL >` and input your username and password
 
-1. Creating proxy cds for “.hdbtable”, “.hdbview”, “.hdbcalculationview”
+3. For the Database Connection of the project, click "Bind" and then select "Bind to an HDI Container" and finally select the HDI container created in your SAP BTP Space. Once successfully bound, you will see a .env file with the VCAP services created in the db folder of your project.
+   
+4. Inside .env, extract the current schema value from VCAP services - this is your schema name. Replace < Schema Name > with this value in the `Admin.hdbroleconfig` and `Admin.hdbrole` files.
 
-2. Converting xsodata into cap service definition
+5. Click the "Open HDI Container" button to open the database explorer.
+   
+6. Open an SQL console with your DBADMIN user or with admin privileges.
+   
+7. Run the following query in SAP HANA Cloud to grant access: <Schema Name> should be replaced with your specific schema name.
+   ```
+   GRANT SELECT ON SCHEMA "_SYS_BI" TO "< Schema Name >#OO";
 
-3. Converting “xsjs”,”xsjslib” into cap nodejs
+   GRANT SELECT ON "_SYS_BI"."M_TIME_DIMENSION" TO "< Schema Name >#OO";
 
-4. Creating proxy cds for cross container schemas
+   GRANT UPDATE ON "_SYS_BI"."M_TIME_DIMENSION" TO "< Schema Name >#OO" WITH GRANT OPTION;
 
-5. Unsupported datatypes in calculation views ex: the date() function is not supported in SAP HANA Cloud, hence it needs to be converted into daydate()
+   GRANT INSERT, SELECT, UPDATE ON "_SYS_BI"."M_TIME_DIMENSION" TO "< Schema Name >#OO" WITH GRANT OPTION;
 
-6. SQL syntax changes in procedure is not integrated ex: UPDATE FROM has to be changed to MERGE INTO, TRUNCATE statement has to be changed to DELETE FROM statement
+   GRANT SELECT ON SCHEMA "_SYS_BI" TO "< Schema Name >#OO" WITH GRANT OPTION;
+   ```
+8. To deploy your application, select the "Deploy" button located in the "SAP HANA Projects" section.
 
-7. Flowgraph and Replication Artifacts Changes are not supported
+## Known Issues in SAP HANA Application Migration Assistant
+- If the package name provided does not exist in the source system, the migration process will still continue without any disruption. In this case, a template project without any artifacts will be created.
+- In the SAP Hana Migration Assistant, even if you change your password after a successful login, it will not update in the environment even though it appears updated in the user interface. The Assistant retrieves it from the environment and the Migration proceeds without issue. If you wish to confirm the password change, after altering the password field, simply click the login button. This will update the password in the environment.
 
+## Features that are currently out of scope in SAP HANA Application Migration Assistant:
+
+1. Converting xsodata into cap service definition
+   
+2. Converting “xsjs”,”xsjslib” into cap nodejs
+   
+3. Creating proxy cds for cross container schema
+   
+4. Following Artifacts are not currently supported '.hdbreptask', '.hdbvirtualtable', '.hdbflowgraph'
 
 ## How to Obtain Support
 
