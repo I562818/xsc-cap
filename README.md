@@ -390,6 +390,8 @@ Once the project is created, there are some adjustments we need to make manually
    
 4. Following Artifacts are not currently supported '.hdbreptask', '.hdbvirtualtable', '.hdbflowgraph'
 
+5. Some artifacts migration is still not implemented. You can find detailed information on manually migrating these artifacts in the following [link](https://help.sap.com/docs/hana-cloud/sap-hana-cloud-migration-guide/checks-performed-by-migration-tool)
+
 ## How to Obtain Support
 
 In case you find a bug, or you need additional support, please open an issue here in [GitHub](https://github.wdf.sap.corp/XSA-Migration/xs-migration-bas-extn/issues).
