@@ -159,7 +159,7 @@ And the following additional properties:
 <img width="545" alt="LoggedIn" src="images-ext\loginenabled.png">
 </p>
 
-6. In the "Migration Options" page, select "Delivery Unit" or "Package Name" as your source type from the drop-down menu.
+6. In the "Migration Options" page, select "Delivery Unit" or "Package Name" as your source type from the drop-down menu. The SAP HANA Application Migration Assistant supports package level migration as well.
 
 <p align="center">
 <img width="545" alt="selectType" src="images-ext\selectType.png">
