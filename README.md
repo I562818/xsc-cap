@@ -36,7 +36,7 @@ HCO_DEMOCONTENT follows the XS Classic Programming Model(XSC) and uses SAP HANA 
 - SAP Cloud Connector
 
 ## Where to Start
-We have successfully migrated the HCO_DEMOCONTENT sample delivery unit using the SAP HANA Application Migration Assistant. The path followed for this Migration involves the below steps:
+To successfully migrate the HCO_DEMOCONTENT sample delivery unit using the SAP HANA Application Migration Assistant, follow the steps below:
 
 1. Install and Configure the SAP Cloud Connector.
 2. Setup an SAP BTP Destination to connect to the source system.
