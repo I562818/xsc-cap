@@ -11,7 +11,7 @@
         ],
         "schema_privileges": [
             {
-                "reference": "<schema_ID>",
+                "reference": "< Schema Name >",
                 "privileges": [
                     "SELECT METADATA",
                     "SELECT CDS METADATA",
@@ -26,7 +26,7 @@
         ],
         "schema_analytic_privileges": [
             {
-                "schema_reference": "<schema_ID>",
+                "schema_reference": "< Schema Name >",
                 "privileges": [
                     "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_SALES_ORDER_6",
                     "SAP_HANA_DEMOCONTENT_EPM_MODELS_AP_SALES_ORDER",
