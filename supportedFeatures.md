@@ -16,6 +16,8 @@
     |UTCDateTime|DateTime|
     |UTCTimestamp|Timestamp|
     |BinaryFloat|Double|
+    |decimal|Decimal|
+    |hana.CHAR|hana.VARCHAR|
   
 - Replacing @OData.publish:true with @cds.autoexpose for enhanced functionality.
   
@@ -28,7 +30,7 @@
 - Log file generation using CDS Compile.
   
 - Converts the technical configuration and element configuration to be CAP compliant, accomplished through the use of “@sql.append”. 
-- Remove Series Entity which is not supported in CAP CDS
+- Remove Series Entity which is not supported in CAP CDS.
   
 - Replaceing the annotation  @Comment  for table and element with “/** */ “to CAP Compliant Format and adding parameters required in package.json.
   
@@ -50,10 +52,25 @@
   
 - Renaming the annotations.
 
-- Creating Proxy Table entities for Hana Native object ".hdbtable"
+- Creating Proxy Table entities for Hana Native object ".hdbtable".
 
-- Creating Proxy Views for Hana Native object ".hdbcalculationview"
+- Creating Proxy Views for Hana Native object ".hdbcalculationview".
 
-- Creating Proxy Hdbview for Hana Native object ".hdbview"
+- Creating Proxy Hdbview for Hana Native object ".hdbview".
 
-- Creating Proxy Hdbfunction for Hana Native object ".hdbtablefunction"
+- Creating Proxy Hdbfunction for Hana Native object ".hdbtablefunction".
+
+- Support for [type of](https://cap.cloud.sap/docs/cds/cdl#typereferences) operator is provided.
+
+- Converting Join, Aggregation, Union and Projection in calculation views into supported format.
+
+- In calculation Views unsupported data types date(), day(), time() and counter datatype ( Integer )  are converted into respective supported data types daydate(), daytime(), secondtime() and counter datatype ( BIGINT ) .
+
+- The SAP HANA Application Migration Assistant performs the following type conversions on these files: ".hdbtable", ".hdbprocedure", ".hdbfunction", ".hdbdropcreatetable", ".hdbtrigger", ".hdblibrary", ".hdbstructuredprivilege", ".hdbview", ".hdbindex", ".hdbconstraint", ".hdbtablefunction", ".hdbsequence" :
+
+    - ALPHANUM is changed to NVARCHAR
+    - TEXT is changed to NCLOB
+    - SHORTTEXT is changed to NVARCHAR
+    - CHAR is changed to VARCHAR
+
+- In calculation views the values inside ```&quot;``` for filter and formula fields are converted to uppercase.
