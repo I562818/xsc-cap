@@ -1,4 +1,4 @@
-# XS Classic Programming Model To SAP Cloud Application Programming Model Migration Using SAP HANA Application Migration Assistant
+# Migration of SAP HANA XS Classic To SAP Cloud Application Programming Model Using SAP HANA Application Migration Assistant
  
 The SAP HANA Application Migration Assistant converts the source XS Classic application which is packaged as a Delivery Unit or a Package to a CAP application with SAP HANA Cloud as a database where the Source XSC Repository database artifacts are converted to the corresponding target CAP complaince database artifacts.
 
