@@ -3,7 +3,7 @@
 The SAP HANA Application Migration Assistant converts the source XS Classic application which is packaged as a Delivery Unit or a Package to a CAP application with SAP HANA Cloud as a database where the Source XSC Repository database artifacts are converted to the corresponding target CAP compliance database artifacts.
 
 ## Introduction
-SAP HANA Interactive Education or SHINE is a demo application that is packaged as [HCO_DEMOCONTENT](https://github.com/SAP-samples/hana-shine/releases/download/v2.5.0/HCO_DEMOCONTENT-1.205.0.tgz) Delivery Unit. It includes the following [features](supportedFeatures.md): 
+SAP HANA Interactive Education or SHINE is a demo application that is packaged as [HCO_DEMOCONTENT](https://github.com/SAP-samples/hana-shine/releases/download/v2.5.0/HCO_DEMOCONTENT-1.205.0.tgz) Delivery Unit. It includes the following features: 
 - **HDI Features:**
   - Table
   - HDBDD Views

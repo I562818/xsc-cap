@@ -4,7 +4,7 @@
 - Converting "hdbconstraint", "hdbindex", "hdbview", "hdbtable", "hdbsequence", "hdbprocedure", "hdbtablefunction", "hdbfunction", "hdbstructuredprivilege", "hdblibrary", "hdbcalculationview", "hdbanalyticprivilege",
 "hdbrole", "hdbsynonymconfig", "hdbtabledata", artifacts into a CAP (Cloud Application Programming) compliant format.
 
-- Converting the file extensions from "hdbcds" files into "cds" for CAP compliance.
+- Converting the file extensions from "hdbdd" files into "cds" for CAP compliance.
   
 - As part of the transition to CAP compliant format, the notation in view definitions should be modified from "" to ![]. This specific [delimiter](https://cap.cloud.sap/docs/cds/cdl#delimited-identifiers) enhances the reliability of processing in CAP CDS.
   
