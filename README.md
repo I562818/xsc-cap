@@ -1,9 +1,9 @@
 # Migration of SAP HANA XS Classic To SAP Cloud Application Programming Model Using SAP HANA Application Migration Assistant
  
-The SAP HANA Application Migration Assistant converts the source XS Classic application which is packaged as a Delivery Unit or a Package to a CAP application with SAP HANA Cloud as a database where the Source XSC Repository database artifacts are converted to the corresponding target CAP complaince database artifacts.
+The SAP HANA Application Migration Assistant converts the source XS Classic application which is packaged as a Delivery Unit or a Package to a CAP application with SAP HANA Cloud as a database where the Source XSC Repository database artifacts are converted to the corresponding target CAP compliance database artifacts.
 
 ## Introduction
-SAP HANA Interactive Education or SHINE is a demo application that is packaged as [HCO_DEMOCONTENT](https://github.com/SAP-samples/hana-shine/releases/download/v2.5.0/HCO_DEMOCONTENT-1.205.0.tgz) Delivery Unit. It includes the following features:
+SAP HANA Interactive Education or SHINE is a demo application that is packaged as [HCO_DEMOCONTENT](https://github.com/SAP-samples/hana-shine/releases/download/v2.5.0/HCO_DEMOCONTENT-1.205.0.tgz) Delivery Unit. It includes the following features: 
 - **HDI Features:**
   - Table
   - HDBDD Views
@@ -379,6 +379,10 @@ Once the project is created, there are some adjustments we need to make manually
 ## Known Issues in SAP HANA Application Migration Assistant
 - If the package name provided does not exist in the source system, the migration process will still continue without any disruption. In this case, a template project without any artifacts will be created.
 - In the SAP Hana Migration Assistant, even if you change your password after a successful login, it will not update in the environment even though it appears updated in the user interface. The Assistant retrieves it from the environment and the Migration proceeds without issue. If you wish to confirm the password change, after altering the password field, simply click the login button. This will update the password in the environment.
+- Some artifacts which are currently not supported in the SAP HANA Application Migration Assistant require manual remodeling before deployment. You can find detailed information on manually migrating these artifacts in the following [link](https://help.sap.com/docs/hana-cloud/sap-hana-cloud-migration-guide/checks-performed-by-migration-tool).
+
+## Features Currently supported in SAP HANA Application Migration Assistant:
+For a detailed list of the features supported by the SAP HANA Application Migration Assistant, please refer to [this](supportedFeatures.md) link.
 
 ## Features that are currently out of scope in SAP HANA Application Migration Assistant:
 
@@ -390,12 +394,11 @@ Once the project is created, there are some adjustments we need to make manually
    
 4. Following Artifacts are not currently supported '.hdbreptask', '.hdbvirtualtable', '.hdbflowgraph'
 
-5. Some artifacts migration is still not implemented. You can find detailed information on manually migrating these artifacts in the following [link](https://help.sap.com/docs/hana-cloud/sap-hana-cloud-migration-guide/checks-performed-by-migration-tool).
-
 ## Learning Resources
 1. [Prepare XS Classic Artifacts for Migration](https://help.sap.com/docs/SAP_HANA_PLATFORM/58d81eb4c9bc4899ba972c9fe7a1a115/a759b4815ae246649c83365cbcede79b.html).
 2. [Prepare the Source System for the XS Application Migration](https://help.sap.com/docs/SAP_HANA_PLATFORM/58d81eb4c9bc4899ba972c9fe7a1a115/2786447387df41f69a0dad1cc2973e95.html).
 3. [The Self-Service Migration Tool for SAP HANA Cloud](https://help.sap.com/docs/hana-cloud/sap-hana-cloud-migration-guide/self-service-migration-for-sap-hana-cloud-tool).
+4. [SAP HANA Cloud, SAP HANA Database Developer Guide for Cloud Foundry Multitarget Applications (SAP Business App Studio)](https://help.sap.com/docs/hana-cloud-database/sap-hana-cloud-sap-hana-database-developer-guide-for-cloud-foundry-multitarget-applications-sap-business-app-studio/sap-hana-cloud-sap-hana-database-developer-guide-for-cloud-foundry-multitarget-applications-sap-business-app-studio)
 
 ## How to Obtain Support
 
