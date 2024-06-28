@@ -1,6 +1,6 @@
 # Migration of SAP HANA XS Classic To SAP Cloud Application Programming Model Using SAP HANA Application Migration Assistant
  
-The SAP HANA Application Migration Assistant converts the source XS Classic application which is packaged as a Delivery Unit or a Package to a CAP application with SAP HANA Cloud as a database where the Source XSC Repository database artifacts are converted to the corresponding target CAP compliance database artifacts.
+The SAP HANA Application Migration Assistant converts the source XS Classic application which is packaged as a Delivery Unit or a Package to a CAP application with SAP HANA Cloud as a database where the Source XSC Repository database artifacts are converted to the corresponding target CAP compliance database artifacts. For a detailed list of the features supported by the SAP HANA Application Migration Assistant, please refer to [this](supportedFeatures.md) link.
 
 ## Introduction
 SAP HANA Interactive Education or SHINE is a demo application that is packaged as [HCO_DEMOCONTENT](https://github.com/SAP-samples/hana-shine/releases/download/v2.5.0/HCO_DEMOCONTENT-1.205.0.tgz) Delivery Unit. It includes the following features: 
